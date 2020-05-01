@@ -7,12 +7,17 @@ function add (tag, parent) {
     if (parent) {
         parent.appendChild(elem);
     }
+    return elem;
 }
-
+const body = document.getElementsByTagName('body');
 let cvs = $('canvas');
 let ctx = cvs.getContext('2d');
 let H = cvs.height = window.innerHeight;
 let W = cvs.width = window.innerWidth;
+let mainBtn = document.createElement('button');
+//body[0].appendChild(mainBtn);
+mainBtn.className = 'main-button';
+mainBtn.innerText = 'Нажать';
 
 let mouse = {
     x: undefined,

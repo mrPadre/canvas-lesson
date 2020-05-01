@@ -52,6 +52,18 @@ function drawNote () {
                     this.color = 'red';
                 }
             }
+            if (mainBtn.offsetTop - this.y < 1
+                && (mainBtn.offsetTop + mainBtn.offsetHeight + this.size) - this.y > -1
+            && mainBtn.offsetLeft - this.x < 1
+                && (mainBtn.offsetLeft + mainBtn.offsetWidth) - this.x > -1) {
+                this.dx = -this.dx;
+                this.dy = -this.dy;
+                if (this.color === 'red'){
+                    this.color = 'black';
+                } else {
+                    this.color = 'red';
+                }
+            }
 
             this.x += this.dx;
             this.y += this.dy;
@@ -83,4 +95,5 @@ function drawNote () {
     animate();
 }
 
-drawNote();
+//drawNote();
+
