@@ -1,5 +1,5 @@
 
-async function drawBoom (strong) {
+function drawBoom (strong) {
 
     function editColor () {
         const colorArr = [
@@ -69,4 +69,4 @@ async function drawBoom (strong) {
     animate();
 }
 
-cvs.addEventListener('click', () => drawBoom( 50));
+//cvs.addEventListener('click', () => drawBoom( 50));
