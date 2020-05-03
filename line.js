@@ -104,4 +104,4 @@ function drawLine () {
     }
     init();
 }
-drawLine();
+//drawLine();
