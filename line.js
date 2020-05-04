@@ -39,6 +39,13 @@ function drawLine () {
             ctx.fillStyle = properties.particleColor;
             ctx.fill();
         }
+        singleDraw (x, y) {
+            this.x = x;
+            this.y = y;
+            this.velocityX = Math.random()*(properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
+            this.velocityY = Math.random()*(properties.particleMaxVelocity * 2) - properties.particleMaxVelocity;
+            this.life = Math.random() * properties.particleLife * 60;
+        }
         reCalculateLife () {
             if (this.life < 1) {
                 this.x = Math.random() * W;
@@ -95,6 +102,14 @@ function drawLine () {
         connectLines();
         requestAnimationFrame(loop);
     }
+
+    function handleDraw() {
+        let single = new Particles;
+        single.singleDraw(mouse.x, mouse.y);
+        particles.push(single);
+    }
+
+    cvs.addEventListener('click', () => handleDraw());
     
     function init() {
         for (let i = 0; i < properties.particleCount; i++){

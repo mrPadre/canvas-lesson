@@ -64,9 +64,6 @@ function drawSprite () {
         requestAnimationFrame(tick);
     }
     async function draw () {
-        // if (x >= 420 || x <= 0) {
-        //     dx = -dx;
-        // }
         if (x >= 380) {
             x = 0;
         }
@@ -75,4 +72,4 @@ function drawSprite () {
         ctx.drawImage(sprite, x, 0, 65, 150, position.x, position.y, 75, 150);
     }
 }
-drawSprite();
+//drawSprite();
