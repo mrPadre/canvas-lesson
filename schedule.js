@@ -91,6 +91,9 @@ function drawSchedule () {
         },
     ];
 
+    let mainIndex = null;
+    let indexBox = $('index-box');
+
     let startTime = 2013;
     let maxTime = startTime + progressValue.length;
     let Xlength = W / 2;
@@ -99,7 +102,7 @@ function drawSchedule () {
     let stepX = 0;
     let zero = {
         x: 60,
-        y: 350,
+        y: 450,
     };
     let radius = 150;
     let circleZero = {
@@ -122,24 +125,49 @@ function drawSchedule () {
         'purple',
     ];
 
+    circleValue.map((item, index) => {
+        let elem = document.createElement('li');
+        elem.innerText = item.year;
+        elem.addEventListener('click', function () {
+            mainIndex = index;
+            drawCircle(circleValue);
+        });
+        indexBox.appendChild(elem);
+    })
+
     function drawProgress (arr, color) {
         ctx.beginPath();
+        let point = new Path2D;
         arr.map((item, index) => {
+            let point2 = new Path2D;
             let stepX = Xlength / arr.length;
             let stepY = Ylength / maxResult;
             let y = zero.y - (item.progress * stepY);
             let x = zero.x + (index * stepX);
+            cvs.addEventListener('mousemove', function (e) {
+                if (ctx.isPointInPath(point2, e.x, e.y)) {
+                   showCircleInfo(item.progress, color);
+                }
+            })
             ctx.fillStyle = color;
-            ctx.lineWidth = '1';
+            ctx.lineWidth = '2';
             ctx.strokeStyle = color;
-            ctx.lineTo(x, y);
-            ctx.stroke();
+            point.lineTo(x, y);
+            ctx.stroke(point);
             ctx.closePath();
             ctx.beginPath();
-            ctx.arc(x, y, 5, 0, Math.PI*2, false);
-            ctx.fill();
-        })
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.shadowBlur = 4;
+            ctx.shadowColor = 'black';
+            point2.arc(x, y, 8, 0, Math.PI*2, false);
+            ctx.fill(point2);
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowBlur = 0;
+        });
     }
+
 
     drawProgress(progressValue, 'green');
     drawProgress(dinamicValue, 'orange');
@@ -147,19 +175,78 @@ function drawSchedule () {
     function drawCircle (arr) {
         let step = 0;
         let maxLength = 0;
+        ctx.clearRect(circleZero.x - radius - 30, circleZero.y - radius - 30, radius * 2 + 60, radius * 2 + 60);
+
         arr.map((item, index) => {
             let length =  (2 * Math.PI / summ) * item.value ;
             maxLength += length;
             const circle = new Path2D();
+            let disx = 15;
+            let disy = 15;
+            if (step >= 1.5 && step <= 2.7) {
+                disx = -disx;
+            } else if (step >= 2.7 && step <= 3.7) {
+                disy = -disy;
+                disx = -disx;
+            } else if (step >= 3.7 && step <= 6) {
+                disy = -disy;
+            }
+
             ctx.beginPath();
-            ctx.fillStyle = colorArr[index];
-            circle.arc(circleZero.x, circleZero.y , radius, step, maxLength );
-            circle.lineTo(circleZero.x, circleZero.y);
+            if (mainIndex === index) {
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+                ctx.shadowBlur = 3;
+                ctx.shadowColor = 'black';
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 2;
+                ctx.fillStyle = colorArr[index];
+                circle.arc(circleZero.x + disx, circleZero.y + disy, radius, step, maxLength );
+                circle.lineTo(circleZero.x + disx, circleZero.y + disy);
+                cvs.addEventListener('mousemove', function (event) {
+                    if (ctx.isPointInPath(circle, event.offsetX, event.offsetY)){
+                        showCircleInfo(item.value, colorArr[index]);
+                    }
+                });
+                ctx.stroke(circle);
+            } else {
+                    ctx.shadowOffsetX = 1;
+                    ctx.shadowOffsetY = 1;
+                    ctx.shadowBlur = 3;
+                    ctx.shadowColor = 'black';
+                    ctx.fillStyle = colorArr[index];
+                    circle.arc(circleZero.x, circleZero.y , radius, step, maxLength );
+                    circle.lineTo(circleZero.x, circleZero.y);
+                    cvs.addEventListener('mousemove', function (event) {
+                        if (ctx.isPointInPath(circle, event.offsetX, event.offsetY)){
+                            showCircleInfo(item.value, colorArr[index]);
+                        }
+                    });
+            }
             ctx.fill(circle);
             step += length;
-        })
+        });
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 0;
     }
     drawCircle(circleValue);
+
+    function showCircleInfo (progress, color) {
+        ctx.beginPath();
+        ctx.clearRect(innerWidth - 220, 20, 200, 100);
+        const info = new Path2D();
+        info.rect(innerWidth - 220, 20, 200, 100);
+        ctx.strokeStyle = 'black';
+        ctx.stroke(info);
+        ctx.beginPath();
+        ctx.font = '16px Arial';
+        ctx.fillStyle = color;
+        ctx.fillRect(innerWidth - 200, 70, 20, 20);
+        ctx.fillText(progress,innerWidth - 200, 50 )
+        ctx.fill();
+        ctx.closePath();
+    }
 
 
 
