@@ -14,6 +14,47 @@ button {
     position: relative;
 }
 
+.menu {
+    width: 100%;
+    height: 100px;
+    cursor: none;
+    position: fixed;
+    background: none;
+    top: 0;
+    left: 0;
+    z-index: 200;
+}
+
+.menu-container {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: fixed;
+    cursor: none;
+    top: 0;
+    left: 0;
+    z-index: 201;
+    overflow-x: auto;
+    scrollbar-width: 0;
+}
+
+.menuItem {
+    cursor: pointer;
+    min-width: 150px;
+    height: 50px;
+    margin: 10px;
+    background: none;
+    font-size: 18px;
+}
+
+.canv-menu {
+    width: 200px;
+    height: 100px;
+    position: relative;
+}
+
 .main-button {
     position: fixed;
     width: 30%;
